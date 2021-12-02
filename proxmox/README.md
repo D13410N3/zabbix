@@ -5,7 +5,7 @@ Simple script for proxmox-monitoring in Zabbix (tested on 5.4.7)
 - Get access token in proxmox-web-panel
 - Enter credentials in `/etc/zabbix/scripts/get.vm.php` (replace them in 'define' section)
 - Add content from `zabbix_agentd.conf` to the end of your `zabbix_agentd.conf` file; restart zabbix-agent service
-- Import new template to Zabbix, add it to your PM node
+- Import `zabbix_proxmox_vm_monitoring.xml` as new template to Zabbix, add it to your PM node
 
 # Discovery
 - `vmid`
