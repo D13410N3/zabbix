@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>5.4</version>
+    <date>2021-11-28T07:28:46Z</date>
+    <groups>
+        <group>
+            <uuid>1b837a3c078647049a0c00c61b4d57b5</uuid>
+            <name>Hypervisors</name>
+        </group>
+    </groups>
+    <templates>
+        <template>
+            <uuid>d0d808a91a684cabb79ea224d7cc359d</uuid>
+            <template>Proxmox VM Monitoring</template>
+            <name>Proxmox VM Monitoring</name>
+            <groups>
+                <group>
+                    <name>Hypervisors</name>
+                </group>
+            </groups>
+            <discovery_rules>
+                <discovery_rule>
+                    <uuid>65e6a676baa043aba0cc464199139722</uuid>
+                    <name>Discover VM</name>
+                    <key>proxmox.list.vm</key>
+                    <item_prototypes>
+                        <item_prototype>
+                            <uuid>11c37852db014b68974018db63109a45</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): CPU Usage</name>
+                            <key>proxmox.vm.cpu_usage[{#VMID}]</key>
+                            <history>365d</history>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>7df95fa10a4045c9a4e47a1266b4a09d</uuid>
+                                    <expression>last(/Proxmox VM Monitoring/proxmox.vm.cpu_usage[{#VMID}])&gt;=90</expression>
+                                    <name>VM {#VMID} ({#VMNAME}): High CPU Utilization</name>
+                                    <priority>WARNING</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>c39c8621111b4a1d9359788bbdb6166f</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Free memory</name>
+                            <key>proxmox.vm.free_memory[{#VMID}]</key>
+                            <history>365d</history>
+                            <units>bytes</units>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>1018f4cf1074404b856e72157a06b1b7</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Status</name>
+                            <key>proxmox.vm.status[{#VMID}]</key>
+                            <delay>30s</delay>
+                            <history>365d</history>
+                            <description>VM status (running/stopped)</description>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>Status</value>
+                                </tag>
+                            </tags>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>7ed2307ddff3443b97a81c7f710863ff</uuid>
+                                    <expression>last(/Proxmox VM Monitoring/proxmox.vm.status[{#VMID}])=0</expression>
+                                    <name>VM {#VMID} ({#VMNAME}) is not running</name>
+                                    <priority>AVERAGE</priority>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>f95b6814ede14d9b9f731d4dd6e6827e</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Total memory</name>
+                            <key>proxmox.vm.total_memory[{#VMID}]</key>
+                            <history>365d</history>
+                            <units>bytes</units>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>f382fdf127a0446083296ae6b183d0d5</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Uptime</name>
+                            <key>proxmox.vm.uptime[{#VMID}]</key>
+                            <history>365d</history>
+                            <units>uptime</units>
+                            <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>6ddd6cf6451b430baadac4e40c29c208</uuid>
+                                    <expression>last(/Proxmox VM Monitoring/proxmox.vm.uptime[{#VMID}])&lt;=600</expression>
+                                    <name>VM {#VMID} ({#VMNAME}) was restarted (uptime &lt;10m)</name>
+                                    <priority>WARNING</priority>
+                                    <dependencies>
+                                        <dependency>
+                                            <name>VM {#VMID} ({#VMNAME}) is not running</name>
+                                            <expression>last(/Proxmox VM Monitoring/proxmox.vm.status[{#VMID}])=0</expression>
+                                        </dependency>
+                                    </dependencies>
+                                </trigger_prototype>
+                            </trigger_prototypes>
+                        </item_prototype>
+                    </item_prototypes>
+                    <graph_prototypes>
+                        <graph_prototype>
+                            <uuid>816ca395df584525bf88a8655fc78310</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Availability</name>
+                            <yaxismax>1</yaxismax>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <ymax_type_1>FIXED</ymax_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>FILLED_REGION</drawtype>
+                                    <color>1A7C11</color>
+                                    <item>
+                                        <host>Proxmox VM Monitoring</host>
+                                        <key>proxmox.vm.status[{#VMID}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>5e841b788f3947bf97f1b69b74d583e0</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): CPU Usage</name>
+                            <ymin_type_1>FIXED</ymin_type_1>
+                            <ymax_type_1>FIXED</ymax_type_1>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <color>1A7C11</color>
+                                    <item>
+                                        <host>Proxmox VM Monitoring</host>
+                                        <key>proxmox.vm.cpu_usage[{#VMID}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                        <graph_prototype>
+                            <uuid>5eb705aae6e64eafbbe32c2f3f35ff42</uuid>
+                            <name>VM {#VMID} ({#VMNAME}): Memory</name>
+                            <graph_items>
+                                <graph_item>
+                                    <sortorder>1</sortorder>
+                                    <drawtype>FILLED_REGION</drawtype>
+                                    <color>1A7C11</color>
+                                    <item>
+                                        <host>Proxmox VM Monitoring</host>
+                                        <key>proxmox.vm.free_memory[{#VMID}]</key>
+                                    </item>
+                                </graph_item>
+                                <graph_item>
+                                    <sortorder>2</sortorder>
+                                    <color>F63100</color>
+                                    <item>
+                                        <host>Proxmox VM Monitoring</host>
+                                        <key>proxmox.vm.total_memory[{#VMID}]</key>
+                                    </item>
+                                </graph_item>
+                            </graph_items>
+                        </graph_prototype>
+                    </graph_prototypes>
+                </discovery_rule>
+            </discovery_rules>
+        </template>
+    </templates>
+</zabbix_export>
